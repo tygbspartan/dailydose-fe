@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react";
 import { useGetProductsQuery } from "@/lib/redux/features/products/productsApi";
 import { Product } from "@/types/product.types";
 import { ROUTES } from "@/constants/routes";
+import SkinConcerns from "@/components/home/SkinConcerns";
 
 function FeaturedCard({ product, index }: { product: Product; index: number }) {
   const isImageLeft = index % 2 === 0;
@@ -88,14 +89,15 @@ export default function HomepageFeatured() {
     </div>
   );
 
-  const products = data?.data.data ?? [];
+  // Exactly two featured products, with the Skin Concerns block between them.
+  const products = (data?.data.data ?? []).slice(0, 2);
   if (products.length === 0) return null;
 
   return (
     <div className="w-full bg-[#191919]">
-      {products.map((product, index) => (
-        <FeaturedCard key={product.id} product={product} index={index} />
-      ))}
+      {products[0] && <FeaturedCard product={products[0]} index={0} />}
+      <SkinConcerns />
+      {products[1] && <FeaturedCard product={products[1]} index={1} />}
     </div>
   );
 }

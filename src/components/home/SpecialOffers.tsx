@@ -9,7 +9,7 @@ interface SpecialOffersProps {
   limit?: number;
 }
 
-export default function SpecialOffers({ limit = 5 }: SpecialOffersProps) {
+export default function SpecialOffers({ limit = 10 }: SpecialOffersProps) {
   const { data: products, isLoading, error } = useGetSpecialOffersQuery(limit);
 
   if (isLoading) return <Spinner />;
@@ -19,7 +19,7 @@ export default function SpecialOffers({ limit = 5 }: SpecialOffersProps) {
     <div>
       <SectionTitle>Special Offers</SectionTitle>
       <div className="mt-5 lg:mt-8.75 home-product-grid">
-        {products.slice(0, 5).map((product) => (
+        {products.slice(0, 10).map((product) => (
           <ProductGridCard key={product.id} product={product} />
         ))}
       </div>

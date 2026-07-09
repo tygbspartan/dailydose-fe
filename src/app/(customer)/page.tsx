@@ -6,8 +6,8 @@ import NewArrivals from "@/components/home/NewArrivals";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import SpecialOffers from "@/components/home/SpecialOffers";
 import ShopBySkinType from "@/components/home/ShopBySkinType";
-import ShopByCategory from "@/components/home/ShopByCategory";
 import HomepageFeatured from "@/components/home/HomepageFeatured";
+import OurProducts from "@/components/home/OurProducts";
 
 export default function HomePage() {
   return (
@@ -20,19 +20,19 @@ export default function HomePage() {
       {/* Brand marquee — full width, flush under hero */}
       <BrandsCarousel />
 
-      {/* New Arrivals — 50px below brands */}
+      {/* New Arrivals — 5 items, 50px below brands */}
       <div className="page-wrapper mt-12.5">
         <NewArrivals limit={5} />
       </div>
 
-      {/* Best Sellers — 50px below new arrivals */}
+      {/* Best Sellers — 10 items, 50px below new arrivals */}
       <div className="page-wrapper mt-12.5">
         <FeaturedProducts />
       </div>
 
-      {/* Special Offers — 50px below best sellers */}
+      {/* Special Offers — 10 items, 50px below best sellers */}
       <div className="page-wrapper mt-12.5">
-        <SpecialOffers limit={5} />
+        <SpecialOffers limit={10} />
       </div>
 
       {/* Shop by Skin Type — full width, 50px below special offers */}
@@ -40,14 +40,14 @@ export default function HomePage() {
         <ShopBySkinType />
       </div>
 
-      {/* Homepage Featured — full width, merges directly under Shop by Skin Type */}
-      <div>
+      {/* Homepage Featured (2 products + Skin Concerns between) — 50px gap */}
+      <div className="mt-12.5">
         <HomepageFeatured />
       </div>
 
-      {/* Shop by Category — 50px below homepage featured */}
+      {/* Our Products — 15 random products, 50px below homepage featured */}
       <div className="page-wrapper mt-12.5">
-        <ShopByCategory />
+        <OurProducts />
       </div>
     </div>
   );

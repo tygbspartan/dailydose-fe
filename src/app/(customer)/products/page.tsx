@@ -35,7 +35,7 @@ function ProductListingContent() {
 
   const { data: productsData, isLoading, error } = useGetProductsQuery({
     page: currentPage,
-    limit: 5,
+    limit: 30,
     categorySlug: categorySlug || undefined,
     brandSlug: brandSlug || undefined,
     search: searchQuery || undefined,
