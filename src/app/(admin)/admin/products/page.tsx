@@ -4,8 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   useGetProductsQuery,
+  useGetAdminProductsQuery,
   useDeleteProductMutation,
 } from "@/lib/redux/features/products/productsApi";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { isSuper } from "@/constants/roles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,13 +35,31 @@ export default function ProductsPage() {
 
   const isDiscountFilter = filter === "discount";
 
-  const { data, isLoading, error } = useGetProductsQuery({
-    page: isDiscountFilter ? 1 : page,
-    limit: isDiscountFilter ? 1000 : 10,
-    search: search || undefined,
-    isFeatured: filter === "featured" ? true : undefined,
-    homepageFeature: filter === "homepage" ? true : undefined,
-  });
+  // Superadmin gets the full list with curation filters; a vendor gets only
+  // their own products via the scoped admin endpoint.
+  const superadmin = useAppSelector((state) => isSuper(state.auth.user?.role));
+
+  const superQuery = useGetProductsQuery(
+    {
+      page: isDiscountFilter ? 1 : page,
+      limit: isDiscountFilter ? 1000 : 10,
+      search: search || undefined,
+      isFeatured: filter === "featured" ? true : undefined,
+      homepageFeature: filter === "homepage" ? true : undefined,
+    },
+    { skip: !superadmin }
+  );
+
+  const vendorQuery = useGetAdminProductsQuery(
+    {
+      page: isDiscountFilter ? 1 : page,
+      limit: isDiscountFilter ? 1000 : 10,
+      search: search || undefined,
+    },
+    { skip: superadmin }
+  );
+
+  const { data, isLoading, error } = superadmin ? superQuery : vendorQuery;
 
   const rawProducts = data?.data.data ?? [];
   const displayProducts = isDiscountFilter

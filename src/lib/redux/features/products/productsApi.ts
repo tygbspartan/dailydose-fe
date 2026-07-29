@@ -92,6 +92,25 @@ export const productsApi = createApi({
       providesTags: ["Products"],
     }),
 
+    // Vendor-scoped admin product list. The backend returns only the caller's
+    // own products (superadmin sees all, or a specific vendor via ?ownerId).
+    getAdminProducts: builder.query<
+      ProductsResponse,
+      { page?: number; limit?: number; search?: string; ownerId?: number | "null" }
+    >({
+      query: (params = {}) => {
+        const searchParams = new URLSearchParams();
+        if (params.page) searchParams.append("page", params.page.toString());
+        if (params.limit) searchParams.append("limit", params.limit.toString());
+        if (params.search) searchParams.append("search", params.search);
+        if (params.ownerId !== undefined)
+          searchParams.append("ownerId", String(params.ownerId));
+        const qs = searchParams.toString();
+        return `${API_ENDPOINTS.PRODUCTS_ADMIN}${qs ? `?${qs}` : ""}`;
+      },
+      providesTags: ["Products"],
+    }),
+
     getFeaturedProducts: builder.query<Product[], void>({
       query: () => "/products?isFeatured=true",
       transformResponse: (response: ProductsResponse) => response.data.data,
@@ -233,6 +252,7 @@ export const productsApi = createApi({
 
 export const {
   useGetProductsQuery,
+  useGetAdminProductsQuery,
   useGetFeaturedProductsQuery,
   useSearchProductsQuery,
   useGetNewArrivalsQuery,

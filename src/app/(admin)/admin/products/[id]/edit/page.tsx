@@ -30,6 +30,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { isSuper } from "@/constants/roles";
 
 const SKIN_TYPES = ["Normal", "Dry", "Oily", "Combination", "Sensitive"];
 
@@ -51,6 +53,7 @@ type LocalImage = {
 type StagedFile = { file: File; isPrimary: boolean };
 
 export default function EditProductPage() {
+  const superadmin = useAppSelector((state) => isSuper(state.auth.user?.role));
   const router = useRouter();
   const params = useParams();
   const productId = parseInt(params.id as string);
@@ -928,42 +931,47 @@ export default function EditProductPage() {
                 className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary"
               />
             </div>
-            <div className="flex items-center justify-between p-4 border rounded-md">
-              <div>
-                <Label htmlFor="isFeatured" className="text-base font-medium">
-                  Featured
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Show this product in featured section
-                </p>
-              </div>
-              <input
-                type="checkbox"
-                id="isFeatured"
-                name="isFeatured"
-                checked={!!formData.isFeatured}
-                onChange={handleInputChange}
-                className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary"
-              />
-            </div>
-            <div className="flex items-center justify-between p-4 border rounded-md">
-              <div>
-                <Label htmlFor="homepageFeature" className="text-base font-medium">
-                  Homepage Featured
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Show this product in the homepage featured section
-                </p>
-              </div>
-              <input
-                type="checkbox"
-                id="homepageFeature"
-                name="homepageFeature"
-                checked={!!formData.homepageFeature}
-                onChange={handleInputChange}
-                className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary"
-              />
-            </div>
+            {/* Storefront curation flags — superadmin only. */}
+            {superadmin && (
+              <>
+                <div className="flex items-center justify-between p-4 border rounded-md">
+                  <div>
+                    <Label htmlFor="isFeatured" className="text-base font-medium">
+                      Featured
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Show this product in featured section
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    id="isFeatured"
+                    name="isFeatured"
+                    checked={!!formData.isFeatured}
+                    onChange={handleInputChange}
+                    className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div className="flex items-center justify-between p-4 border rounded-md">
+                  <div>
+                    <Label htmlFor="homepageFeature" className="text-base font-medium">
+                      Homepage Featured
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Show this product in the homepage featured section
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    id="homepageFeature"
+                    name="homepageFeature"
+                    checked={!!formData.homepageFeature}
+                    onChange={handleInputChange}
+                    className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
 

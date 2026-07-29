@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/constants/routes";
 import { BRAND } from "@/config/brand";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { isSuper } from "@/constants/roles";
 import {
   LayoutDashboard,
   Package,
@@ -15,13 +17,16 @@ import {
   Tag,
   Star,
   Images,
+  Store,
 } from "lucide-react";
 
+// `superadminOnly` items are hidden from vendors (role "admin").
 const navigation = [
   {
     name: "Dashboard",
     href: ROUTES.ADMIN_DASHBOARD,
     icon: LayoutDashboard,
+    superadminOnly: true,
   },
   {
     name: "Products",
@@ -32,6 +37,7 @@ const navigation = [
     name: "Categories",
     href: ROUTES.ADMIN_CATEGORIES,
     icon: FolderTree,
+    superadminOnly: true,
   },
   {
     name: "Brands",
@@ -52,33 +58,76 @@ const navigation = [
     name: "Reviews",
     href: ROUTES.ADMIN_REVIEWS,
     icon: Star,
+    superadminOnly: true,
   },
   {
     name: "Hero Banners",
     href: ROUTES.ADMIN_HERO,
     icon: Images,
+    superadminOnly: true,
+  },
+  {
+    name: "Vendors",
+    href: ROUTES.ADMIN_VENDORS,
+    icon: Store,
+    superadminOnly: true,
   },
 ];
 
-export default function AdminSidebar() {
+export default function AdminSidebar({
+  onNavigate,
+}: {
+  /** Called when a nav link is clicked — used to close the mobile drawer. */
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
+  const user = useAppSelector((state) => state.auth.user);
+  const role = user?.role;
+  const navItems = navigation.filter(
+    (item) => !item.superadminOnly || isSuper(role)
+  );
+
+  // A vendor (non-superadmin) sees their own company branding here; the
+  // superadmin keeps the platform logo.
+  const showVendorBrand = !isSuper(role) && !!user?.logoUrl;
 
   return (
-    <div className="flex flex-col w-64 bg-white border-r border-gray-200 h-screen shrink-0">
-      {/* Logo */}
-      <div className="flex items-center justify-center h-16 border-b border-gray-200">
-        <Image src={BRAND.logo.primary} alt={BRAND.name} width={90} height={40} className="object-contain" />
+    <div className="flex flex-col w-64 bg-white border-r border-gray-200 h-full shrink-0">
+      {/* Logo — vendor's company logo, or the platform logo for the superadmin */}
+      <div className="flex items-center justify-center gap-2 h-16 border-b border-gray-200 px-3">
+        {showVendorBrand ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={user!.logoUrl as string}
+              alt={user?.companyName || "Vendor"}
+              className="h-9 w-9 rounded object-contain border shrink-0"
+            />
+            <span className="text-sm font-semibold text-gray-800 truncate">
+              {user?.companyName || user?.firstName || "My Store"}
+            </span>
+          </>
+        ) : (
+          <Image
+            src={BRAND.logo.primary}
+            alt={BRAND.name}
+            width={90}
+            height={40}
+            className="object-contain"
+          />
+        )}
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4">
         <div className="px-3 space-y-1">
-          {navigation.map((item) => {
+          {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.name}
                 href={item.href}
+                onClick={onNavigate}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
                   isActive

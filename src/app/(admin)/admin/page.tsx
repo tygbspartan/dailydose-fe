@@ -1,6 +1,9 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { isSuper } from "@/constants/roles";
 import { useGetDashboardStatsQuery } from "@/lib/redux/features/dashboard/dashboardApi";
 import {
   Card,
@@ -40,15 +43,30 @@ const getDefaultDates = () => {
 export default function AdminDashboardPage() {
   const defaults = getDefaultDates();
 
+  // The dashboard shows global platform stats (superadmin only). Vendors land
+  // here by default after login, so redirect them to their products.
+  const router = useRouter();
+  const user = useAppSelector((state) => state.auth.user);
+  const superadmin = isSuper(user?.role);
+
+  useEffect(() => {
+    if (user && !superadmin) {
+      router.replace(ROUTES.ADMIN_PRODUCTS);
+    }
+  }, [user, superadmin, router]);
+
   const [startDate, setStartDate] = useState(defaults.start);
   const [endDate, setEndDate] = useState(defaults.end);
   const [appliedStartDate, setAppliedStartDate] = useState(defaults.start);
   const [appliedEndDate, setAppliedEndDate] = useState(defaults.end);
 
-  const { data, isLoading, error } = useGetDashboardStatsQuery({
-    startDate: appliedStartDate,
-    endDate: appliedEndDate,
-  });
+  const { data, isLoading, error } = useGetDashboardStatsQuery(
+    {
+      startDate: appliedStartDate,
+      endDate: appliedEndDate,
+    },
+    { skip: !superadmin }, // don't fire the 403-prone request for vendors
+  );
 
   const handleApplyFilter = () => {
     if (!startDate || !endDate) {

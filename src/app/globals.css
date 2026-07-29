@@ -190,3 +190,56 @@
     will-change: transform;
   }
 }
+
+/* Loading screen loader: three 32px squares (4px gap → 36px step) in a 2×2
+   grid with one empty slot. Only ONE square moves at a time — every 0.25s the
+   square behind the gap hops CLOCKWISE into it (each square's path is
+   TL→TR→BR→BL→TL). Full cycle is 3s (12 hops); each square has its own
+   keyframe, staggered by 0.25s, so exactly one moves per tick. Corners:
+   TL(0,0) TR(36,0) BR(36,36) BL(0,36). */
+@keyframes ddx-a {
+  0%,   22%   { transform: translate(0, 0); }         /* TL */
+  25%,  47%   { transform: translate(36px, 0); }       /* TR */
+  50%,  72%   { transform: translate(36px, 36px); }    /* BR */
+  75%,  97%   { transform: translate(0, 36px); }       /* BL */
+  100%        { transform: translate(0, 0); }          /* TL */
+}
+@keyframes ddx-b {
+  0%,   14%   { transform: translate(36px, 0); }       /* TR */
+  16.66%, 39% { transform: translate(36px, 36px); }    /* BR */
+  41.66%, 64% { transform: translate(0, 36px); }       /* BL */
+  66.66%, 89% { transform: translate(0, 0); }          /* TL */
+  91.66%,100% { transform: translate(36px, 0); }       /* TR */
+}
+@keyframes ddx-c {
+  0%,   6%    { transform: translate(36px, 36px); }    /* BR */
+  8.33%, 31%  { transform: translate(0, 36px); }        /* BL */
+  33.33%, 56% { transform: translate(0, 0); }           /* TL */
+  58.33%, 81% { transform: translate(36px, 0); }        /* TR */
+  83.33%,100% { transform: translate(36px, 36px); }     /* BR */
+}
+
+.ddx-loader {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  /* Tilt the whole grid 45° so the squares read as diamonds (and the empty
+     slot still travels clockwise, just in the rotated frame). */
+  transform: rotate(45deg);
+}
+
+.ddx-loader span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* Start corners: TL (light), TR (dark), BR (medium). */
+.ddx-loader span:nth-child(1) { background: #fadcbc; animation-name: ddx-a; }
+.ddx-loader span:nth-child(2) { background: #584539; animation-name: ddx-b; }
+.ddx-loader span:nth-child(3) { background: #bf8f68; animation-name: ddx-c; }

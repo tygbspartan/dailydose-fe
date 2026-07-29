@@ -11,6 +11,7 @@ import { discountsApi } from "./features/discounts/discountsApi";
 import { reviewsApi } from "./features/reviews/reviewsApi";
 import { cartApi } from "./features/cart/cartApi";
 import { checkoutApi } from "./features/checkout/checkoutApi";
+import { vendorsApi } from "./features/vendors/vendorsApi";
 import authReducer from "./features/auth/authSlice";
 import uiReducer from "./features/ui/uiSlice";
 import guestCartReducer from "./features/cart/guestCartSlice";
@@ -34,6 +35,7 @@ export const store = configureStore({
     [wishlistApi.reducerPath]: wishlistApi.reducer,
     [checkoutApi.reducerPath]: checkoutApi.reducer,
     [heroApi.reducerPath]: heroApi.reducer,
+    [vendorsApi.reducerPath]: vendorsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -49,6 +51,7 @@ export const store = configureStore({
       wishlistApi.middleware,
       checkoutApi.middleware,
       heroApi.middleware,
+      vendorsApi.middleware,
     ),
 });
 

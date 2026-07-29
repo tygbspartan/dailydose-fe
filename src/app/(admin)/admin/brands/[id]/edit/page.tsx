@@ -29,8 +29,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { isSuper } from "@/constants/roles";
 
 export default function EditBrandPage() {
+  const superadmin = useAppSelector((state) => isSuper(state.auth.user?.role));
   const router = useRouter();
   const params = useParams();
   const brandId = parseInt(params.id as string);
@@ -430,27 +433,30 @@ export default function EditBrandPage() {
               />
             </div>
 
-            <div className="flex items-center justify-between p-4 border rounded-md">
-              <div>
-                <Label
-                  htmlFor="isFeatured"
-                  className="text-base font-medium cursor-pointer"
-                >
-                  Featured
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Show this brand in featured section
-                </p>
+            {/* Featured is a storefront curation flag — superadmin only. */}
+            {superadmin && (
+              <div className="flex items-center justify-between p-4 border rounded-md">
+                <div>
+                  <Label
+                    htmlFor="isFeatured"
+                    className="text-base font-medium cursor-pointer"
+                  >
+                    Featured
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Show this brand in featured section
+                  </p>
+                </div>
+                <input
+                  type="checkbox"
+                  id="isFeatured"
+                  name="isFeatured"
+                  checked={formData.isFeatured}
+                  onChange={handleInputChange}
+                  className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary cursor-pointer"
+                />
               </div>
-              <input
-                type="checkbox"
-                id="isFeatured"
-                name="isFeatured"
-                checked={formData.isFeatured}
-                onChange={handleInputChange}
-                className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary cursor-pointer"
-              />
-            </div>
+            )}
           </CardContent>
         </Card>
 

@@ -1,5 +1,5 @@
 import LoadingScreen from "@/components/ui/LoadingScreen";
 
-export default function PageLoader() {
+export default function Loading() {
   return <LoadingScreen />;
 }

@@ -16,6 +16,7 @@ export const ROUTES = {
   ADMIN_DISCOUNTS: "/admin/discounts",
   ADMIN_REVIEWS: "/admin/reviews",
   ADMIN_HERO: "/admin/hero",
+  ADMIN_VENDORS: "/admin/vendors", // superadmin only
 
   // Customer routes
   HOME: "/",

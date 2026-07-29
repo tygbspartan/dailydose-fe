@@ -1,10 +1,15 @@
+export type UserRole = "customer" | "admin" | "superadmin";
+
 export interface User {
   id: number;
   email: string;
   firstName: string | null;
   lastName: string | null;
   phone: string | null;
-  role: "admin" | "customer";
+  role: UserRole;
+  // Vendor (admin) profile — present for vendors, null otherwise.
+  companyName?: string | null;
+  logoUrl?: string | null;
   isEmailVerified: boolean;
   createdAt: string;
   updatedAt: string;

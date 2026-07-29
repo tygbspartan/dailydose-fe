@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
 
   // Products
   PRODUCTS: "/products",
+  PRODUCTS_ADMIN: "/products/admin/all", // vendor-scoped admin list
   PRODUCT_BY_ID: (id: number) => `/products/${id}`,
   PRODUCT_BY_SLUG: (slug: string) => `/products/slug/${slug}`,
 
@@ -41,4 +42,10 @@ export const API_ENDPOINTS = {
   REVIEWS: "/reviews",
   REVIEWS_ADMIN: "/reviews/admin/all",
   REVIEW_MODERATE: (id: number) => `/reviews/${id}/moderate`,
+
+  // Vendors (superadmin only)
+  VENDORS: "/admin/vendors",
+  VENDOR_BY_ID: (id: number) => `/admin/vendors/${id}`,
+  VENDOR_STATUS: (id: number) => `/admin/vendors/${id}/status`,
+  VENDOR_BRANDS: (id: number) => `/admin/vendors/${id}/brands`,
 };
