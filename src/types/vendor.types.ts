@@ -38,6 +38,8 @@ export interface CreateVendorDto {
   firstName?: string;
   lastName?: string;
   phone?: string;
+  /** Brands the superadmin assigns to this vendor at creation. */
+  brandIds?: number[];
 }
 
 export interface UpdateVendorDto {

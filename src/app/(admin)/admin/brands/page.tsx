@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  useGetBrandsQuery,
+  useGetAdminBrandsQuery,
   useDeleteBrandMutation,
 } from "@/lib/redux/features/brands/brandsApi";
 import { Button } from "@/components/ui/button";
@@ -22,13 +22,17 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { ROUTES } from "@/constants/routes";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { isSuper } from "@/constants/roles";
 
 export default function BrandsPage() {
+  // Only the superadmin manages brands; vendors are view-only.
+  const superadmin = useAppSelector((state) => isSuper(state.auth.user?.role));
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [filterFeatured, setFilterFeatured] = useState<boolean | null>(null);
 
-  const { data, isLoading, error } = useGetBrandsQuery();
+  const { data, isLoading, error } = useGetAdminBrandsQuery();
   const [deleteBrand, { isLoading: isDeleting }] = useDeleteBrandMutation();
 
   const handleSearch = (e: React.FormEvent) => {
@@ -85,12 +89,14 @@ export default function BrandsPage() {
             Manage your product brands
           </p>
         </div>
-        <Link href={`${ROUTES.ADMIN_BRANDS}/create`}>
-          <Button className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Add Brand
-          </Button>
-        </Link>
+        {superadmin && (
+          <Link href={`${ROUTES.ADMIN_BRANDS}/create`}>
+            <Button className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              Add Brand
+            </Button>
+          </Link>
+        )}
       </div>
 
       {/* Search & Filters */}
@@ -169,7 +175,7 @@ export default function BrandsPage() {
                 ? "Try adjusting your filters"
                 : "Get started by adding your first brand"}
             </p>
-            {!search && filterFeatured === null && (
+            {!search && filterFeatured === null && superadmin && (
               <Link href={`${ROUTES.ADMIN_BRANDS}/create`}>
                 <Button className="mt-4">
                   <Plus className="h-4 w-4 mr-2" />
@@ -259,20 +265,24 @@ export default function BrandsPage() {
                             View
                           </Button>
                         </Link>
-                        <Link href={`${ROUTES.ADMIN_BRANDS}/${brand.id}/edit`}>
-                          <Button variant="outline" size="sm">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                        </Link>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDelete(brand.id, brand.name)}
-                          disabled={isDeleting}
-                          className="border-primary/30 text-primary hover:bg-primary/5"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        {superadmin && (
+                          <>
+                            <Link href={`${ROUTES.ADMIN_BRANDS}/${brand.id}/edit`}>
+                              <Button variant="outline" size="sm">
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                            </Link>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDelete(brand.id, brand.name)}
+                              disabled={isDeleting}
+                              className="border-primary/30 text-primary hover:bg-primary/5"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </div>
                   </CardContent>

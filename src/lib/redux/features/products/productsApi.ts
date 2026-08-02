@@ -96,7 +96,14 @@ export const productsApi = createApi({
     // own products (superadmin sees all, or a specific vendor via ?ownerId).
     getAdminProducts: builder.query<
       ProductsResponse,
-      { page?: number; limit?: number; search?: string; ownerId?: number | "null" }
+      {
+        page?: number;
+        limit?: number;
+        search?: string;
+        ownerId?: number | "null";
+        isFeatured?: boolean;
+        homepageFeature?: boolean;
+      }
     >({
       query: (params = {}) => {
         const searchParams = new URLSearchParams();
@@ -105,6 +112,10 @@ export const productsApi = createApi({
         if (params.search) searchParams.append("search", params.search);
         if (params.ownerId !== undefined)
           searchParams.append("ownerId", String(params.ownerId));
+        if (params.isFeatured !== undefined)
+          searchParams.append("isFeatured", String(params.isFeatured));
+        if (params.homepageFeature !== undefined)
+          searchParams.append("homepageFeature", String(params.homepageFeature));
         const qs = searchParams.toString();
         return `${API_ENDPOINTS.PRODUCTS_ADMIN}${qs ? `?${qs}` : ""}`;
       },

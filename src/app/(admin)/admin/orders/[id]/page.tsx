@@ -462,7 +462,7 @@ export default function OrderDetailsPage() {
               </div>
               <Button
                 onClick={handleUpdateOrderStatus}
-                disabled={isUpdatingStatus || selectedStatus === order.status}
+                disabled
                 className="w-full"
               >
                 {isUpdatingStatus ? (

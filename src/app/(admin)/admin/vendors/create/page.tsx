@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useCreateVendorMutation } from "@/lib/redux/features/vendors/vendorsApi";
+import { useGetAdminBrandsQuery } from "@/lib/redux/features/brands/brandsApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,7 +22,11 @@ import { ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
 export default function CreateVendorPage() {
   const router = useRouter();
   const [createVendor, { isLoading }] = useCreateVendorMutation();
+  // Only unassigned brands can be given to a new vendor.
+  const { data: brandsData } = useGetAdminBrandsQuery({ ownerId: "null" });
+  const allBrands = brandsData?.data ?? [];
   const [error, setError] = useState("");
+  const [selectedBrandIds, setSelectedBrandIds] = useState<number[]>([]);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -33,6 +38,11 @@ export default function CreateVendorPage() {
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const toggleBrand = (brandId: number) =>
+    setSelectedBrandIds((ids) =>
+      ids.includes(brandId) ? ids.filter((x) => x !== brandId) : [...ids, brandId]
+    );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +59,7 @@ export default function CreateVendorPage() {
         firstName: form.firstName || undefined,
         lastName: form.lastName || undefined,
         phone: form.phone || undefined,
+        brandIds: selectedBrandIds.length > 0 ? selectedBrandIds : undefined,
       }).unwrap();
       router.push(ROUTES.ADMIN_VENDORS);
     } catch (err: unknown) {
@@ -132,6 +143,38 @@ export default function CreateVendorPage() {
               <div className="space-y-1.5">
                 <Label htmlFor="phone">Phone</Label>
                 <Input id="phone" value={form.phone} onChange={set("phone")} />
+              </div>
+
+              {/* Brand assignment — the vendor can only create products under
+                  the brands selected here. */}
+              <div className="space-y-1.5">
+                <Label>Assigned brands</Label>
+                <p className="text-xs text-muted-foreground">
+                  The vendor can only add products under the brands you select.
+                  You can change this later from the vendor&apos;s page.
+                </p>
+                {allBrands.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No unassigned brands available. Create a new brand, or free
+                    one up from another vendor, then assign it here.
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                    {allBrands.map((brand) => (
+                      <label
+                        key={brand.id}
+                        className="flex items-center gap-2 rounded-md border p-2 cursor-pointer hover:bg-gray-50"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedBrandIds.includes(brand.id)}
+                          onChange={() => toggleBrand(brand.id)}
+                        />
+                        <span className="text-sm truncate">{brand.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end gap-2 pt-2">

@@ -7,7 +7,7 @@ import {
   useUploadProductImageMutation,
 } from "@/lib/redux/features/products/productsApi";
 import { useGetCategoriesQuery } from "@/lib/redux/features/categories/categoriesApi";
-import { useGetBrandsQuery } from "@/lib/redux/features/brands/brandsApi";
+import { useGetAdminBrandsQuery } from "@/lib/redux/features/brands/brandsApi";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { isSuper } from "@/constants/roles";
 import { Button } from "@/components/ui/button";
@@ -54,7 +54,7 @@ export default function CreateProductPage() {
   const isLoading = isCreating || isUploadingImages;
 
   const { data: categoriesData } = useGetCategoriesQuery();
-  const { data: brandsData } = useGetBrandsQuery();
+  const { data: brandsData } = useGetAdminBrandsQuery();
 
   const [formData, setFormData] = useState({
     name: "",

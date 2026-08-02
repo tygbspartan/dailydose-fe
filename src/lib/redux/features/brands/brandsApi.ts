@@ -1,5 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "../../baseQuery";
+import { API_ENDPOINTS } from "@/constants/api";
 
 export interface Brand {
   id: number;
@@ -11,6 +12,12 @@ export interface Brand {
   isActive: boolean;
   metaTitle: string | null;
   metaDescription: string | null;
+  ownerId?: number | null;
+  owner?: {
+    id: number;
+    companyName: string | null;
+    firstName: string | null;
+  } | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -38,9 +45,27 @@ export const brandsApi = createApi({
   baseQuery: baseQueryWithAuth,
   tagTypes: ["Brands"],
   endpoints: (builder) => ({
-    // Get all brands
+    // Get all brands (public — storefront)
     getBrands: builder.query<{ status: string; data: Brand[] }, void>({
       query: () => "/brands",
+      providesTags: ["Brands"],
+    }),
+
+    // Admin/vendor scoped brands: vendor sees only their own; superadmin all
+    // (optionally filtered by ?ownerId — e.g. "null" for unassigned brands).
+    // Used by the brand-management list, product-form dropdown, and vendor pages.
+    getAdminBrands: builder.query<
+      { status: string; data: Brand[] },
+      { ownerId?: number | "null"; search?: string } | void
+    >({
+      query: (params) => {
+        const sp = new URLSearchParams();
+        if (params && params.ownerId !== undefined)
+          sp.append("ownerId", String(params.ownerId));
+        if (params && params.search) sp.append("search", params.search);
+        const qs = sp.toString();
+        return `${API_ENDPOINTS.BRANDS_ADMIN}${qs ? `?${qs}` : ""}`;
+      },
       providesTags: ["Brands"],
     }),
 
@@ -114,6 +139,7 @@ export const brandsApi = createApi({
 
 export const {
   useGetBrandsQuery,
+  useGetAdminBrandsQuery,
   useGetBrandByIdQuery,
   useCreateBrandMutation,
   useUpdateBrandMutation,

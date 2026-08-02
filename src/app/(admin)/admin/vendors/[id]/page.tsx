@@ -10,7 +10,7 @@ import {
   useSetVendorStatusMutation,
   useSetVendorBrandsMutation,
 } from "@/lib/redux/features/vendors/vendorsApi";
-import { useGetBrandsQuery } from "@/lib/redux/features/brands/brandsApi";
+import { useGetAdminBrandsQuery } from "@/lib/redux/features/brands/brandsApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,7 +30,7 @@ export default function VendorDetailPage() {
   const id = Number(params?.id);
 
   const { data: vendor, isLoading } = useGetVendorQuery(id, { skip: !id });
-  const { data: brandsData } = useGetBrandsQuery();
+  const { data: brandsData } = useGetAdminBrandsQuery();
   const [updateVendor, { isLoading: isSaving }] = useUpdateVendorMutation();
   const [setStatus, { isLoading: isToggling }] = useSetVendorStatusMutation();
   const [setBrands, { isLoading: isSavingBrands }] = useSetVendorBrandsMutation();
@@ -156,8 +156,10 @@ export default function VendorDetailPage() {
               <CardHeader>
                 <CardTitle>Brand ownership</CardTitle>
                 <CardDescription>
-                  Select the brands this vendor owns. Only they (and the
-                  superadmin) can create products under an owned brand.
+                  Select the brands this vendor owns — only they (and the
+                  superadmin) can create products under an owned brand. Checking
+                  a brand marked &ldquo;assigned to&rdquo; another vendor will
+                  move it to this vendor. Unchecking one leaves it unassigned.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -165,19 +167,46 @@ export default function VendorDetailPage() {
                   <p className="text-sm text-muted-foreground">No brands exist yet.</p>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {allBrands.map((brand) => (
-                      <label
-                        key={brand.id}
-                        className="flex items-center gap-2 rounded-md border p-2 cursor-pointer hover:bg-gray-50"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedBrandIds.includes(brand.id)}
-                          onChange={() => toggleBrand(brand.id)}
-                        />
-                        <span className="text-sm truncate">{brand.name}</span>
-                      </label>
-                    ))}
+                    {allBrands.map((brand) => {
+                      const ownedByThisVendor = brand.ownerId === vendor.id;
+                      const ownedByOther =
+                        brand.ownerId != null && !ownedByThisVendor;
+                      const ownerLabel = ownedByOther
+                        ? `assigned to ${
+                            brand.owner?.companyName ||
+                            brand.owner?.firstName ||
+                            "another vendor"
+                          }`
+                        : brand.ownerId == null
+                        ? "unassigned"
+                        : "";
+                      return (
+                        <label
+                          key={brand.id}
+                          className="flex items-center gap-2 rounded-md border p-2 cursor-pointer hover:bg-gray-50"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedBrandIds.includes(brand.id)}
+                            onChange={() => toggleBrand(brand.id)}
+                          />
+                          <span className="text-sm truncate">
+                            {brand.name}
+                            {ownerLabel && (
+                              <span
+                                className={`ml-1 text-xs ${
+                                  ownedByOther
+                                    ? "text-amber-600"
+                                    : "text-muted-foreground"
+                                }`}
+                              >
+                                ({ownerLabel})
+                              </span>
+                            )}
+                          </span>
+                        </label>
+                      );
+                    })}
                   </div>
                 )}
                 <div className="flex justify-end">

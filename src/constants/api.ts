@@ -25,6 +25,7 @@ export const API_ENDPOINTS = {
 
   // Brands
   BRANDS: "/brands",
+  BRANDS_ADMIN: "/brands/admin/list", // vendor-scoped admin list
   BRAND_BY_ID: (id: number) => `/brands/${id}`,
 
   // Orders

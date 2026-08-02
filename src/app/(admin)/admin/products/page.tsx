@@ -3,12 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  useGetProductsQuery,
   useGetAdminProductsQuery,
   useDeleteProductMutation,
 } from "@/lib/redux/features/products/productsApi";
-import { useAppSelector } from "@/lib/redux/hooks";
-import { isSuper } from "@/constants/roles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,31 +32,16 @@ export default function ProductsPage() {
 
   const isDiscountFilter = filter === "discount";
 
-  // Superadmin gets the full list with curation filters; a vendor gets only
-  // their own products via the scoped admin endpoint.
-  const superadmin = useAppSelector((state) => isSuper(state.auth.user?.role));
-
-  const superQuery = useGetProductsQuery(
-    {
-      page: isDiscountFilter ? 1 : page,
-      limit: isDiscountFilter ? 1000 : 10,
-      search: search || undefined,
-      isFeatured: filter === "featured" ? true : undefined,
-      homepageFeature: filter === "homepage" ? true : undefined,
-    },
-    { skip: !superadmin }
-  );
-
-  const vendorQuery = useGetAdminProductsQuery(
-    {
-      page: isDiscountFilter ? 1 : page,
-      limit: isDiscountFilter ? 1000 : 10,
-      search: search || undefined,
-    },
-    { skip: superadmin }
-  );
-
-  const { data, isLoading, error } = superadmin ? superQuery : vendorQuery;
+  // Scoped admin list: superadmin sees all products (incl. inactive), a vendor
+  // sees only their own. The public /products endpoint is storefront-only now
+  // (hides inactive), so the admin panel must use this endpoint.
+  const { data, isLoading, error } = useGetAdminProductsQuery({
+    page: isDiscountFilter ? 1 : page,
+    limit: isDiscountFilter ? 1000 : 10,
+    search: search || undefined,
+    isFeatured: filter === "featured" ? true : undefined,
+    homepageFeature: filter === "homepage" ? true : undefined,
+  });
 
   const rawProducts = data?.data.data ?? [];
   const displayProducts = isDiscountFilter

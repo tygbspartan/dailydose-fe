@@ -8,7 +8,7 @@ import {
   useUploadProductImageMutation,
 } from "@/lib/redux/features/products/productsApi";
 import { useGetCategoriesQuery } from "@/lib/redux/features/categories/categoriesApi";
-import { useGetBrandsQuery } from "@/lib/redux/features/brands/brandsApi";
+import { useGetAdminBrandsQuery } from "@/lib/redux/features/brands/brandsApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -65,7 +65,7 @@ export default function EditProductPage() {
     useUploadProductImageMutation();
 
   const { data: categoriesData } = useGetCategoriesQuery();
-  const { data: brandsData } = useGetBrandsQuery();
+  const { data: brandsData } = useGetAdminBrandsQuery();
 
   const [formData, setFormData] = useState({
     name: "",
