@@ -158,8 +158,8 @@ export default function VendorDetailPage() {
                 <CardDescription>
                   Select the brands this vendor owns — only they (and the
                   superadmin) can create products under an owned brand. Checking
-                  a brand marked &ldquo;assigned to&rdquo; another vendor will
-                  move it to this vendor. Unchecking one leaves it unassigned.
+                  a brand marked &ldquo;already assigned&rdquo; will move it to
+                  this vendor. Unchecking one leaves it unassigned.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -172,11 +172,7 @@ export default function VendorDetailPage() {
                       const ownedByOther =
                         brand.ownerId != null && !ownedByThisVendor;
                       const ownerLabel = ownedByOther
-                        ? `assigned to ${
-                            brand.owner?.companyName ||
-                            brand.owner?.firstName ||
-                            "another vendor"
-                          }`
+                        ? "already assigned"
                         : brand.ownerId == null
                         ? "unassigned"
                         : "";

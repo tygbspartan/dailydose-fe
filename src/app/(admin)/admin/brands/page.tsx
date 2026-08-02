@@ -173,7 +173,9 @@ export default function BrandsPage() {
             <p className="text-sm text-muted-foreground mt-2">
               {search || filterFeatured !== null
                 ? "Try adjusting your filters"
-                : "Get started by adding your first brand"}
+                : superadmin
+                ? "Get started by adding your first brand"
+                : "No brands are assigned to you yet. Ask the platform admin to assign you a brand."}
             </p>
             {!search && filterFeatured === null && superadmin && (
               <Link href={`${ROUTES.ADMIN_BRANDS}/create`}>

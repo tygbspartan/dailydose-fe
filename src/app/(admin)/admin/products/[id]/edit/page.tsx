@@ -524,6 +524,12 @@ export default function EditProductPage() {
                     </option>
                   ))}
                 </select>
+                {!superadmin && (brandsData?.data.length ?? 0) === 0 && (
+                  <p className="text-xs text-amber-600">
+                    No brands are assigned to you yet. The platform admin must
+                    assign you a brand before you can add products.
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="categoryId">Category</Label>
