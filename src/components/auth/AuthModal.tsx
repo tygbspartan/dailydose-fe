@@ -12,6 +12,7 @@ import {
 } from "@/lib/redux/features/auth/authApi";
 import { setCredentials } from "@/lib/redux/features/auth/authSlice";
 import { ROUTES } from "@/constants/routes";
+import { isPrivileged } from "@/constants/roles";
 
 type Tab = "signin" | "register";
 
@@ -134,7 +135,7 @@ export default function AuthModal({ defaultTab = "signin" }: { defaultTab?: Tab 
     try {
       const res = await login({ email: loginEmail, password: loginPassword }).unwrap();
       dispatch(setCredentials({ user: res.data.user, token: res.data.token }));
-      router.push(res.data.user.role === "admin" ? ROUTES.ADMIN_DASHBOARD : ROUTES.HOME);
+      router.push(isPrivileged(res.data.user.role) ? ROUTES.ADMIN_DASHBOARD : ROUTES.HOME);
     } catch (err: any) {
       if (err.data?.needsVerification) {
         setLoginNeedsVerification(true);

@@ -7,6 +7,7 @@ import { setCredentials } from "@/lib/redux/features/auth/authSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, AlertCircle } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
+import { isPrivileged } from "@/constants/roles";
 import { useState } from "react";
 
 function GoogleSuccessContent() {
@@ -74,8 +75,8 @@ function GoogleSuccessContent() {
 
         console.log("User authenticated successfully, redirecting...");
 
-        // Redirect based on role
-        if (userData.data.role === "admin") {
+        // Redirect based on role — privileged users (admin/superadmin) → dashboard
+        if (isPrivileged(userData.data.role)) {
           router.push(ROUTES.ADMIN_DASHBOARD);
         } else {
           router.push(ROUTES.HOME);
