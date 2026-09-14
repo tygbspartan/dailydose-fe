@@ -228,7 +228,7 @@ export default function EditBrandPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">
-                Brand Name <span className="text-primary">*</span>
+                Brand Name<span className="-ml-1.5 text-primary">*</span>
               </Label>
               <Input
                 id="name"

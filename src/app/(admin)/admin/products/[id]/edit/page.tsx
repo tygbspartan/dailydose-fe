@@ -460,7 +460,7 @@ export default function EditProductPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">
-                Product Name <span className="text-primary">*</span>
+                Product Name<span className="-ml-1.5 text-primary">*</span>
               </Label>
               <Input
                 id="name"
@@ -567,7 +567,7 @@ export default function EditProductPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="price">
-                  Selling Price (Rs) <span className="text-primary">*</span>
+                  Selling Price (Rs)<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <Input
                   id="price"
@@ -618,7 +618,7 @@ export default function EditProductPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="stockQuantity">
-                  Stock Quantity <span className="text-primary">*</span>
+                  Stock Quantity<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <Input
                   id="stockQuantity"

@@ -707,7 +707,7 @@ export default function ReviewsPage() {
               {/* Admin Note Input */}
               <div>
                 <Label htmlFor="adminNote">
-                  Admin Note <span className="text-primary">*</span>
+                  Admin Note<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <Textarea
                   id="adminNote"

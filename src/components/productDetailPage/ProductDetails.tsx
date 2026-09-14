@@ -94,6 +94,8 @@ export default function ProductDetails({
               src={mainImage.imageUrl}
               alt={mainImage.altText ?? product.name}
               fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              quality={90}
               className="object-contain"
               priority
             />
@@ -121,6 +123,8 @@ export default function ProductDetails({
                   src={img.imageUrl}
                   alt={img.altText ?? product.name}
                   fill
+                  sizes="(min-width: 1024px) 160px, 33vw"
+                  quality={90}
                   className="object-cover"
                 />
               </button>

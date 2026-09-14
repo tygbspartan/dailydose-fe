@@ -58,7 +58,7 @@ export default function ShippingDetails({
           {/* Full Name */}
           <div className="lg:col-span-2">
             <label htmlFor="fullName" className={LBL}>
-              Full Name <span className="text-red-600">*</span>
+              Full Name<span className="-ml-1.5 text-red-600">*</span>
             </label>
             <Input
               id="fullName"
@@ -75,7 +75,7 @@ export default function ShippingDetails({
           {/* Phone */}
           <div>
             <label htmlFor="phone" className={LBL}>
-              Phone Number <span className="text-red-600">*</span>
+              Phone Number<span className="-ml-1.5 text-red-600">*</span>
             </label>
             <Input
               id="phone"
@@ -92,7 +92,7 @@ export default function ShippingDetails({
           {/* Email */}
           <div>
             <label htmlFor="email" className={LBL}>
-              Email <span className="text-red-600">*</span>
+              Email<span className="-ml-1.5 text-red-600">*</span>
             </label>
             <Input
               id="email"
@@ -110,7 +110,7 @@ export default function ShippingDetails({
           {/* Address Line 1 */}
           <div>
             <label htmlFor="addressLine1" className={LBL}>
-              Address Line 1 <span className="text-red-600">*</span>
+              Address Line 1<span className="-ml-1.5 text-red-600">*</span>
             </label>
             <Input
               id="addressLine1"
@@ -141,7 +141,7 @@ export default function ShippingDetails({
           {/* City */}
           <div>
             <label htmlFor="city" className={LBL}>
-              City / District <span className="text-red-600">*</span>
+              City / District<span className="-ml-1.5 text-red-600">*</span>
             </label>
             <select
               id="city"
@@ -171,7 +171,7 @@ export default function ShippingDetails({
           {/* Province */}
           <div>
             <label htmlFor="province" className={LBL}>
-              Province <span className="text-red-600">*</span>
+              Province<span className="-ml-1.5 text-red-600">*</span>
             </label>
             <select
               id="province"
@@ -194,7 +194,7 @@ export default function ShippingDetails({
           {/* Landmark */}
           <div>
             <label htmlFor="landmark" className={LBL}>
-              Landmark <span className="text-red-600">*</span>
+              Landmark<span className="-ml-1.5 text-red-600">*</span>
             </label>
             <Input
               id="landmark"
@@ -211,7 +211,7 @@ export default function ShippingDetails({
           {/* Postal Code */}
           <div>
             <label htmlFor="postalCode" className={LBL}>
-              Postal Code <span className="text-red-600">*</span>
+              Postal Code<span className="-ml-1.5 text-red-600">*</span>
             </label>
             <Input
               id="postalCode"
@@ -325,7 +325,7 @@ export default function ShippingDetails({
                   {/* Transaction Number */}
                   <div>
                     <label htmlFor="transactionNumber" className={LBL}>
-                      Transaction Number <span className="text-red-600">*</span>
+                      Transaction Number<span className="-ml-1.5 text-red-600">*</span>
                     </label>
                     <Input
                       id="transactionNumber"

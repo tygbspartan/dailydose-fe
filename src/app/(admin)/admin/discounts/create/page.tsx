@@ -152,7 +152,7 @@ export default function CreateDiscountPage() {
           <CardContent className="space-y-4">
             <div>
               <Label htmlFor="name">
-                Discount Name <span className="text-primary">*</span>
+                Discount Name<span className="-ml-1.5 text-primary">*</span>
               </Label>
               <Input
                 id="name"
@@ -171,7 +171,7 @@ export default function CreateDiscountPage() {
 
             <div>
               <Label htmlFor="code">
-                Promo Code <span className="text-primary">*</span>
+                Promo Code<span className="-ml-1.5 text-primary">*</span>
               </Label>
               <Input
                 id="code"
@@ -205,7 +205,7 @@ export default function CreateDiscountPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="type">
-                  Discount Type <span className="text-primary">*</span>
+                  Discount Type<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <Select
                   value={type}
@@ -225,7 +225,7 @@ export default function CreateDiscountPage() {
 
               <div>
                 <Label htmlFor="value">
-                  Value <span className="text-primary">*</span>
+                  Value<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <div className="relative mt-2">
                   <Input
@@ -306,7 +306,7 @@ export default function CreateDiscountPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="startDate">
-                  Start Date <span className="text-primary">*</span>
+                  Start Date<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <Input
                   id="startDate"
@@ -324,7 +324,7 @@ export default function CreateDiscountPage() {
 
               <div>
                 <Label htmlFor="endDate">
-                  End Date <span className="text-primary">*</span>
+                  End Date<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <Input
                   id="endDate"

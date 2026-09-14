@@ -265,35 +265,35 @@ export default function AuthModal({ defaultTab = "signin" }: { defaultTab?: Tab 
 
             {/* First + Last name */}
             <div className="grid grid-cols-2 gap-3">
-              <Field label={<>First Name <span className="text-red-500">*</span></>}>
+              <Field label={<>First Name<span className="-ml-1.5 text-red-500">*</span></>}>
                 <input type="text" value={reg.firstName} onChange={(e) => setReg({ ...reg, firstName: e.target.value })} placeholder="John" className={INPUT} required />
               </Field>
-              <Field label={<>Last Name <span className="text-red-500">*</span></>}>
+              <Field label={<>Last Name<span className="-ml-1.5 text-red-500">*</span></>}>
                 <input type="text" value={reg.lastName} onChange={(e) => setReg({ ...reg, lastName: e.target.value })} placeholder="Doe" className={INPUT} required />
               </Field>
             </div>
 
             {/* Email — 15px */}
             <div className="flex flex-col gap-1.5 mt-3.75">
-              <label className={LABEL}>Email address <span className="text-red-500">*</span></label>
+              <label className={LABEL}>Email address<span className="-ml-1.5 text-red-500">*</span></label>
               <input type="email" value={reg.email} onChange={(e) => setReg({ ...reg, email: e.target.value })} placeholder="Your email" className={INPUT} required />
             </div>
 
             {/* Phone — 15px */}
             <div className="flex flex-col gap-1.5 mt-3.75">
-              <label className={LABEL}>Phone Number <span className="text-red-500">*</span></label>
+              <label className={LABEL}>Phone Number<span className="-ml-1.5 text-red-500">*</span></label>
               <input type="tel" value={reg.phone} onChange={(e) => setReg({ ...reg, phone: e.target.value })} placeholder="9860123456" className={INPUT} required />
             </div>
 
             {/* Password — 15px */}
             <div className="flex flex-col gap-1.5 mt-3.75">
-              <label className={LABEL}>Password <span className="text-red-500">*</span></label>
+              <label className={LABEL}>Password<span className="-ml-1.5 text-red-500">*</span></label>
               <PasswordInput value={reg.password} onChange={(v) => setReg({ ...reg, password: v })} placeholder="Min 6 characters" required />
             </div>
 
             {/* Confirm Password — 15px */}
             <div className="flex flex-col gap-1.5 mt-3.75">
-              <label className={LABEL}>Confirm Password <span className="text-red-500">*</span></label>
+              <label className={LABEL}>Confirm Password<span className="-ml-1.5 text-red-500">*</span></label>
               <PasswordInput value={reg.confirmPassword} onChange={(v) => setReg({ ...reg, confirmPassword: v })} placeholder="Repeat password" required />
             </div>
 

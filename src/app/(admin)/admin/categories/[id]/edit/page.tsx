@@ -98,14 +98,8 @@ export default function EditCategoryPage() {
     return [];
   };
 
-  // Reset parentId when level changes (but not on initial load)
-  const [initialLoadDone, setInitialLoadDone] = useState(false);
-  useEffect(() => {
-    if (initialLoadDone && categoryData?.data) {
-      setFormData((prev) => ({ ...prev, parentId: "" }));
-    }
-    setInitialLoadDone(true);
-  }, [formData.level]);
+  // Note: the level is read-only on this page, so parentId is never reset on a
+  // level change — it's populated once from the loaded category above.
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -246,7 +240,7 @@ export default function EditCategoryPage() {
             {/* Category Name */}
             <div className="space-y-2">
               <Label htmlFor="name">
-                Category Name <span className="text-primary">*</span>
+                Category Name<span className="-ml-1.5 text-primary">*</span>
               </Label>
               <Input
                 id="name"
@@ -311,7 +305,7 @@ export default function EditCategoryPage() {
             {showParentField && (
               <div className="space-y-2">
                 <Label htmlFor="parentId">
-                  Parent Category <span className="text-primary">*</span>
+                  Parent Category<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <select
                   id="parentId"

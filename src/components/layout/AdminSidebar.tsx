@@ -20,57 +20,85 @@ import {
   Store,
 } from "lucide-react";
 
-// `superadminOnly` items are hidden from vendors (role "admin").
-const navigation = [
+// Grouped navigation. `superadminOnly` items are hidden from vendors (role
+// "admin"); any group left with no visible items is dropped entirely (see
+// `visibleGroups` below). Catalog is ordered by creation dependency —
+// Categories → Brands → Products.
+const navGroups = [
   {
-    name: "Dashboard",
-    href: ROUTES.ADMIN_DASHBOARD,
-    icon: LayoutDashboard,
-    superadminOnly: true,
+    label: "Overview",
+    items: [
+      {
+        name: "Dashboard",
+        href: ROUTES.ADMIN_DASHBOARD,
+        icon: LayoutDashboard,
+        superadminOnly: true,
+      },
+    ],
   },
   {
-    name: "Products",
-    href: ROUTES.ADMIN_PRODUCTS,
-    icon: Package,
+    label: "Catalog",
+    items: [
+      {
+        name: "Categories",
+        href: ROUTES.ADMIN_CATEGORIES,
+        icon: FolderTree,
+        superadminOnly: true,
+      },
+      {
+        name: "Brands",
+        href: ROUTES.ADMIN_BRANDS,
+        icon: Award,
+      },
+      {
+        name: "Products",
+        href: ROUTES.ADMIN_PRODUCTS,
+        icon: Package,
+      },
+    ],
   },
   {
-    name: "Categories",
-    href: ROUTES.ADMIN_CATEGORIES,
-    icon: FolderTree,
-    superadminOnly: true,
+    label: "Sales",
+    items: [
+      {
+        name: "Orders",
+        href: ROUTES.ADMIN_ORDERS,
+        icon: ShoppingCart,
+      },
+      {
+        name: "Discounts",
+        href: ROUTES.ADMIN_DISCOUNTS,
+        icon: Tag,
+      },
+    ],
   },
   {
-    name: "Brands",
-    href: ROUTES.ADMIN_BRANDS,
-    icon: Award,
+    label: "Content",
+    items: [
+      {
+        name: "Hero Banners",
+        href: ROUTES.ADMIN_HERO,
+        icon: Images,
+        superadminOnly: true,
+      },
+      {
+        name: "Reviews",
+        href: ROUTES.ADMIN_REVIEWS,
+        icon: Star,
+        superadminOnly: true,
+      },
+    ],
   },
   {
-    name: "Orders",
-    href: ROUTES.ADMIN_ORDERS,
-    icon: ShoppingCart,
-  },
-  {
-    name: "Discounts",
-    href: ROUTES.ADMIN_DISCOUNTS,
-    icon: Tag,
-  },
-  {
-    name: "Reviews",
-    href: ROUTES.ADMIN_REVIEWS,
-    icon: Star,
-    superadminOnly: true,
-  },
-  {
-    name: "Hero Banners",
-    href: ROUTES.ADMIN_HERO,
-    icon: Images,
-    superadminOnly: true,
-  },
-  {
-    name: "Vendors",
-    href: ROUTES.ADMIN_VENDORS,
-    icon: Store,
-    superadminOnly: true,
+    label: "Platform",
+    items: [
+      {
+        name: "Vendors",
+        href: ROUTES.ADMIN_VENDORS,
+        icon: Store,
+        superadminOnly: true,
+      },
+    ],
   },
 ];
 
@@ -83,9 +111,13 @@ export default function AdminSidebar({
   const pathname = usePathname();
   const user = useAppSelector((state) => state.auth.user);
   const role = user?.role;
-  const navItems = navigation.filter(
-    (item) => !item.superadminOnly || isSuper(role)
-  );
+  // Filter items by role, then drop any group with nothing left to show.
+  const visibleGroups = navGroups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => !item.superadminOnly || isSuper(role)),
+    }))
+    .filter((group) => group.items.length > 0);
 
   // A vendor (non-superadmin) sees their own company branding here; the
   // superadmin keeps the platform logo.
@@ -118,28 +150,35 @@ export default function AdminSidebar({
         )}
       </div>
 
-      {/* Navigation */}
+      {/* Navigation — grouped with uppercase section labels */}
       <nav className="flex-1 overflow-y-auto py-4">
-        <div className="px-3 space-y-1">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={onNavigate}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
-                  isActive
-                    ? "bg-primary text-white"
-                    : "text-gray-700 hover:bg-gray-100"
-                )}
-              >
-                <item.icon className="h-5 w-5" />
-                {item.name}
-              </Link>
-            );
-          })}
+        <div className="px-3 space-y-6">
+          {visibleGroups.map((group) => (
+            <div key={group.label} className="space-y-1">
+              <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                {group.label}
+              </p>
+              {group.items.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={onNavigate}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                      isActive
+                        ? "bg-primary text-white"
+                        : "text-gray-700 hover:bg-gray-100"
+                    )}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
         </div>
       </nav>
 

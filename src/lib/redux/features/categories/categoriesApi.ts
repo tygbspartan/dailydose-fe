@@ -31,6 +31,17 @@ export interface UpdateCategoryRequest {
   isActive?: boolean;
 }
 
+export interface CategoryTreeNode {
+  name: string;
+  description?: string;
+  children?: CategoryTreeNode[];
+}
+
+export interface CreateCategoryTreeRequest {
+  parentId?: number | null;
+  nodes: CategoryTreeNode[];
+}
+
 export const categoriesApi = createApi({
   reducerPath: "categoriesApi",
   baseQuery: baseQueryWithAuth,
@@ -57,6 +68,19 @@ export const categoriesApi = createApi({
         url: "/categories",
         method: "POST",
         body: category,
+      }),
+      invalidatesTags: ["Categories"],
+    }),
+
+    // Create a whole subtree in one request
+    createCategoryTree: builder.mutation<
+      { status: string; data: Category[] },
+      CreateCategoryTreeRequest
+    >({
+      query: (body) => ({
+        url: "/categories/tree",
+        method: "POST",
+        body,
       }),
       invalidatesTags: ["Categories"],
     }),
@@ -92,6 +116,7 @@ export const {
   useGetCategoriesQuery,
   useGetCategoryByIdQuery,
   useCreateCategoryMutation,
+  useCreateCategoryTreeMutation,
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
 } = categoriesApi;

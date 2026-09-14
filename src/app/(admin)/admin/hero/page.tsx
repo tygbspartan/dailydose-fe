@@ -110,7 +110,7 @@ function HeroModal({ mode, image, onClose, onSuccess }: ModalProps) {
           {mode === "add" && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Image File <span className="text-red-500">*</span>
+                Image File<span className="-ml-1.5 text-red-500">*</span>
               </label>
               <input
                 ref={fileRef}

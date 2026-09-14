@@ -276,7 +276,7 @@ export default function CreateProductPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">
-                Product Name <span className="text-primary">*</span>
+                Product Name<span className="-ml-1.5 text-primary">*</span>
               </Label>
               <Input
                 id="name"
@@ -290,7 +290,7 @@ export default function CreateProductPage() {
 
             <div className="space-y-2">
               <Label htmlFor="longDescription">
-                Long Description <span className="text-primary">*</span>
+                Long Description<span className="-ml-1.5 text-primary">*</span>
               </Label>
               <textarea
                 id="longDescription"
@@ -305,7 +305,7 @@ export default function CreateProductPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="sku">
-                  SKU <span className="text-primary">*</span>
+                  SKU<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <Input
                   id="sku"
@@ -330,7 +330,7 @@ export default function CreateProductPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="brandId">
-                  Brand <span className="text-primary">*</span>
+                  Brand<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <select
                   id="brandId"
@@ -355,7 +355,7 @@ export default function CreateProductPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="categoryId">
-                  Category <span className="text-primary">*</span>
+                  Category<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <select
                   id="categoryId"
@@ -391,7 +391,7 @@ export default function CreateProductPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="price">
-                  Selling Price (Rs) <span className="text-primary">*</span>
+                  Selling Price (Rs)<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <Input
                   id="price"
@@ -421,7 +421,7 @@ export default function CreateProductPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="costPrice">
-                  Cost Price (Rs) <span className="text-primary">*</span>
+                  Cost Price (Rs)<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <Input
                   id="costPrice"
@@ -447,7 +447,7 @@ export default function CreateProductPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="stockQuantity">
-                  Stock Quantity <span className="text-primary">*</span>
+                  Stock Quantity<span className="-ml-1.5 text-primary">*</span>
                 </Label>
                 <Input
                   id="stockQuantity"
@@ -478,7 +478,7 @@ export default function CreateProductPage() {
         <Card>
           <CardHeader>
             <CardTitle>
-              Product Images <span className="text-primary">*</span>
+              Product Images<span className="-ml-1.5 text-primary">*</span>
             </CardTitle>
             <CardDescription>
               Select image files to upload. The first image is primary by
