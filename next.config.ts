@@ -58,6 +58,23 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // 301 the old query-filter URLs to the clean, indexable category/brand routes.
+  async redirects() {
+    return [
+      {
+        source: "/products",
+        has: [{ type: "query", key: "category", value: "(?<slug>[^&]+)" }],
+        destination: "/category/:slug",
+        permanent: true,
+      },
+      {
+        source: "/products",
+        has: [{ type: "query", key: "brand", value: "(?<slug>[^&]+)" }],
+        destination: "/brand/:slug",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

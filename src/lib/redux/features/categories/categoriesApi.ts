@@ -6,6 +6,7 @@ export interface Category {
   name: string;
   slug: string;
   description: string | null;
+  seoDescription?: string | null;
   parentId: number | null;
   level: number;
   displayOrder: number;
@@ -29,6 +30,7 @@ export interface UpdateCategoryRequest {
   parentId?: number;
   displayOrder?: number;
   isActive?: boolean;
+  seoDescription?: string;
 }
 
 export interface CategoryTreeNode {

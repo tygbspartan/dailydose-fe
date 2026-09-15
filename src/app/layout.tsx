@@ -67,6 +67,18 @@ export default function RootLayout({
   return (
     <html lang="en" style={{ "--color-primary": BRAND.primaryColor, "--color-ring": BRAND.primaryColor } as React.CSSProperties}>
       <body className={`${poppins.className} ${inter.variable} ${montserrat.variable}`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: BRAND.name,
+              url: "https://dailydose.skin",
+              logo: "https://dailydose.skin/logos/logoPrimary.png",
+            }),
+          }}
+        />
         <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>

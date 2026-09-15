@@ -401,7 +401,7 @@ export default function Navbar() {
                           {level1.children.map((level2) => (
                             <div key={level2.id} className="space-y-3">
                               <Link
-                                href={`${ROUTES.PRODUCTS}?category=${level2.slug}`}
+                                href={`${ROUTES.CATEGORY}/${level2.slug}`}
                                 className="font-semibold text-sm text-black flex items-center gap-1 hover:text-primary transition-colors"
                               >
                                 {level2.name}
@@ -412,7 +412,7 @@ export default function Navbar() {
                                   {level2.children.map((level3) => (
                                     <li key={level3.id}>
                                       <Link
-                                        href={`${ROUTES.PRODUCTS}?category=${level3.slug}`}
+                                        href={`${ROUTES.CATEGORY}/${level3.slug}`}
                                         className="text-sm text-gray-600 hover:text-primary transition-colors block"
                                       >
                                         {level3.name}
@@ -462,7 +462,7 @@ export default function Navbar() {
                               {level2.children?.map((level3) => (
                                 <Link
                                   key={level3.id}
-                                  href={`${ROUTES.PRODUCTS}?category=${level3.slug}`}
+                                  href={`${ROUTES.CATEGORY}/${level3.slug}`}
                                   className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-md"
                                   onClick={() => setMobileMenuOpen(false)}
                                 >

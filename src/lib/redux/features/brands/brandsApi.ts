@@ -12,6 +12,7 @@ export interface Brand {
   isActive: boolean;
   metaTitle: string | null;
   metaDescription: string | null;
+  seoDescription: string | null;
   ownerId?: number | null;
   owner?: {
     id: number;
@@ -29,6 +30,7 @@ export interface CreateBrandRequest {
   isActive?: boolean;
   metaTitle?: string;
   metaDescription?: string;
+  seoDescription?: string;
 }
 
 export interface UpdateBrandRequest {
@@ -38,6 +40,7 @@ export interface UpdateBrandRequest {
   isActive?: boolean;
   metaTitle?: string;
   metaDescription?: string;
+  seoDescription?: string;
 }
 
 export const brandsApi = createApi({

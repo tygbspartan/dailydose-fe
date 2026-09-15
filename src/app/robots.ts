@@ -2,26 +2,39 @@ import type { MetadataRoute } from "next";
 
 const SITE = "https://dailydose.skin";
 
-// Generates /robots.txt — tells crawlers what to index and where the sitemap is.
+// Private / functional surfaces kept out of search (and AI) crawling.
+const DISALLOW = [
+  "/admin",
+  "/account",
+  "/checkout",
+  "/cart",
+  "/products", // the filter UI — category/brand pages are the indexable surfaces
+  "/profile",
+  "/order-confirmation",
+  "/login",
+  "/register",
+  "/verify-email",
+  "/forgot-password",
+  "/reset-password",
+  "/auth",
+];
+
+// Explicitly welcomed search + AI crawlers.
+const CRAWLERS = [
+  "Googlebot",
+  "Bingbot",
+  "OAI-SearchBot",
+  "ChatGPT-User",
+  "PerplexityBot",
+  "ClaudeBot",
+];
+
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      // Keep private / functional pages out of search results.
-      disallow: [
-        "/admin",
-        "/checkout",
-        "/profile",
-        "/order-confirmation",
-        "/login",
-        "/register",
-        "/verify-email",
-        "/forgot-password",
-        "/reset-password",
-        "/auth",
-      ],
-    },
+    rules: [
+      { userAgent: CRAWLERS, allow: "/", disallow: DISALLOW },
+      { userAgent: "*", allow: "/", disallow: DISALLOW },
+    ],
     sitemap: `${SITE}/sitemap.xml`,
     host: SITE,
   };

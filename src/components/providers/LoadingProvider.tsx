@@ -30,9 +30,14 @@ export default function LoadingProvider({
     }
   }, [categoriesLoading, brandsLoading, productsLoading]);
 
-  if (!isReady) {
-    return <PageLoader />;
-  }
-
-  return <>{children}</>;
+  // Render children immediately so their content is in the server HTML (SEO),
+  // and show the loader as an overlay on top until the preloaded data is ready.
+  // Replacing children with the loader (the old behavior) meant every page's
+  // SSR output was just the spinner — invisible to crawlers.
+  return (
+    <>
+      {children}
+      {!isReady && <PageLoader />}
+    </>
+  );
 }
