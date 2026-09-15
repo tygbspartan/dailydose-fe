@@ -129,27 +129,6 @@ export default async function ProductDetailPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="font-inter text-[12px] lg:text-sm text-[#747373]">
-        <ol className="flex flex-wrap items-center gap-1.5">
-          <li>
-            <Link href={ROUTES.HOME} className="hover:text-primary">Home</Link>
-          </li>
-          {chain.map((c) => (
-            <li key={c.slug} className="flex items-center gap-1.5">
-              <span aria-hidden>/</span>
-              <Link href={`${ROUTES.CATEGORY}/${c.slug}`} className="hover:text-primary">
-                {c.name}
-              </Link>
-            </li>
-          ))}
-          <li className="flex items-center gap-1.5">
-            <span aria-hidden>/</span>
-            <span className="text-[#4B4B4B] line-clamp-1" aria-current="page">{product.name}</span>
-          </li>
-        </ol>
-      </nav>
-
       {/* Top: gallery + details */}
       <div className="flex flex-col lg:flex-row gap-10 items-start">
         <ProductGallery images={product.images ?? []} name={product.name} />

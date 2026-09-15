@@ -4,9 +4,10 @@ import { SITE_URL, buildBreadcrumbJsonLd, buildCollectionPageJsonLd } from "@/li
 import {
   getCategoryBySlug,
   getProductsPage,
+  getBrandsList,
   type CategoryDetail,
 } from "@/lib/server/catalog";
-import CollectionView, { type Crumb } from "@/components/catalog/CollectionView";
+import CollectionView from "@/components/catalog/CollectionView";
 
 const LIMIT = 12;
 
@@ -81,35 +82,37 @@ export default async function CategoryPage({
   const sortBy = str(sp.sortBy);
   const sortOrder = str(sp.sortOrder);
 
-  const { data: products, pagination } = await getProductsPage({
-    categorySlug: slug,
-    page,
-    limit: LIMIT,
-    sortBy,
-    sortOrder,
-    minPrice: str(sp.minPrice),
-    maxPrice: str(sp.maxPrice),
-    inStock: str(sp.inStock),
-  });
+  const [{ data: products, pagination }, brands] = await Promise.all([
+    getProductsPage({
+      categorySlug: slug,
+      brandSlug: str(sp.brand),
+      page,
+      limit: LIMIT,
+      sortBy,
+      sortOrder,
+      minPrice: str(sp.minPrice),
+      maxPrice: str(sp.maxPrice),
+      inStock: str(sp.inStock),
+      skinType: str(sp.skinType),
+      skinConcern: str(sp.skinConcern),
+    }),
+    getBrandsList(),
+  ]);
 
   const chain = chainOf(category);
   const cleanPath = `/category/${slug}`;
 
-  // Pagination hrefs preserve sort but not one-off filters.
+  // Pagination hrefs preserve every active filter/sort, swapping only the page.
   const hrefForPage = (n: number) => {
     const qs = new URLSearchParams();
+    for (const [k, v] of Object.entries(sp)) {
+      if (k === "page") continue;
+      if (typeof v === "string" && v) qs.set(k, v);
+    }
     if (n > 1) qs.set("page", String(n));
-    if (sortBy) qs.set("sortBy", sortBy);
-    if (sortOrder) qs.set("sortOrder", sortOrder);
     const s = qs.toString();
     return s ? `${cleanPath}?${s}` : cleanPath;
   };
-
-  const breadcrumb: Crumb[] = [
-    { name: "Home", href: "/" },
-    ...chain.slice(0, -1).map((c) => ({ name: c.name, href: `/category/${c.slug}` })),
-    { name: category.name },
-  ];
 
   const collectionJsonLd = buildCollectionPageJsonLd({
     name: `${category.name} — Daily Dose`,
@@ -130,14 +133,13 @@ export default async function CategoryPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <CollectionView
-        title={`${category.name} in Nepal`}
+        title={category.name}
         intro={category.seoDescription}
-        breadcrumb={breadcrumb}
         products={products}
-        total={pagination.total}
         page={page}
         totalPages={pagination.totalPages}
         hrefForPage={hrefForPage}
+        brands={brands}
       />
     </>
   );

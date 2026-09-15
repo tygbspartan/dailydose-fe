@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SITE_URL, buildBreadcrumbJsonLd, buildCollectionPageJsonLd } from "@/lib/seo/jsonld";
 import { getBrandBySlug, getProductsPage } from "@/lib/server/catalog";
-import CollectionView, { type Crumb } from "@/components/catalog/CollectionView";
+import CollectionView from "@/components/catalog/CollectionView";
 
 const LIMIT = 12;
 
@@ -73,19 +73,22 @@ export default async function BrandPage({
     minPrice: str(sp.minPrice),
     maxPrice: str(sp.maxPrice),
     inStock: str(sp.inStock),
+    skinType: str(sp.skinType),
+    skinConcern: str(sp.skinConcern),
   });
 
   const cleanPath = `/brand/${slug}`;
+  // Pagination hrefs preserve every active filter/sort, swapping only the page.
   const hrefForPage = (n: number) => {
     const qs = new URLSearchParams();
+    for (const [k, v] of Object.entries(sp)) {
+      if (k === "page") continue;
+      if (typeof v === "string" && v) qs.set(k, v);
+    }
     if (n > 1) qs.set("page", String(n));
-    if (sortBy) qs.set("sortBy", sortBy);
-    if (sortOrder) qs.set("sortOrder", sortOrder);
     const s = qs.toString();
     return s ? `${cleanPath}?${s}` : cleanPath;
   };
-
-  const breadcrumb: Crumb[] = [{ name: "Home", href: "/" }, { name: brand.name }];
 
   const collectionJsonLd = buildCollectionPageJsonLd({
     name: `${brand.name} — Daily Dose`,
@@ -107,14 +110,14 @@ export default async function BrandPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <CollectionView
-        title={`${brand.name} Products in Nepal`}
+        title={brand.name}
         intro={brand.seoDescription}
-        breadcrumb={breadcrumb}
         products={products}
-        total={pagination.total}
         page={page}
         totalPages={pagination.totalPages}
         hrefForPage={hrefForPage}
+        brands={[]}
+        showBrandFilter={false}
       />
     </>
   );

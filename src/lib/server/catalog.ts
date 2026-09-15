@@ -112,6 +112,23 @@ export const getBrandBySlug = cache(
   }
 );
 
+/** Lightweight brand list for the category page's filter sidebar. */
+export const getBrandsList = cache(
+  async (): Promise<{ id: number; name: string; slug: string }[]> => {
+    try {
+      const base = await serverApiBase();
+      const res = await fetch(`${base}/brands`, { next: { revalidate: 3600 } });
+      if (!res.ok) return [];
+      const json = await res.json();
+      return ((json?.data ?? []) as { id: number; name: string; slug: string }[]).map(
+        (b) => ({ id: b.id, name: b.name, slug: b.slug })
+      );
+    } catch {
+      return [];
+    }
+  }
+);
+
 const EMPTY_PAGE: ProductsPage = {
   data: [],
   pagination: { page: 1, limit: 12, total: 0, totalPages: 0 },
